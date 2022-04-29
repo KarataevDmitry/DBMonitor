@@ -6,7 +6,7 @@ namespace DBMonitor.BLL
     {
         [NotNull]
         public int Id { get; set; }
-        public virtual Rule Rule { get; set; }
+        public Rule Rule { get; set; }
         public int RuleId { get; set; }
         public LaunchResult Result { get; set; }
         public DateTime LaunchedAt { get; set; }

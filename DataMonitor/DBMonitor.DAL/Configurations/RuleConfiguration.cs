@@ -17,6 +17,9 @@ namespace DBMonitor.DAL.Configurations
             builder.Property(x => x.DeletedAt);
             builder.Property(x => x.RunAt);
             builder.Property(x => x.Name).IsRequired();
+            builder.HasMany(x => x.LaunchHistories).WithOne(x => x.Rule);
+
+
         }
     }
 }

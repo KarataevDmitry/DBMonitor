@@ -6,6 +6,7 @@
         public string QueryText { get; set; }
         public string AddedByUser { get; set; }
         public string RunAt { get; set; }
+        public List<LaunchHistory> LaunchHistories { get; set; } = new();
         public DateTime? DeletedAt { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }

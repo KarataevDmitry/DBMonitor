@@ -2,6 +2,8 @@
 using DBMonitor.BLL;
 using DBMonitor.DAL.Interfaces;
 
+using Microsoft.EntityFrameworkCore;
+
 namespace DBMonitor.DAL.Services
 {
     public class LaunchHistoryDBService : IDBService<LaunchHistory>
@@ -24,7 +26,7 @@ namespace DBMonitor.DAL.Services
             _context!.SaveChanges();
         }
         public LaunchHistory? Get(int Id) => _context!.History!.Find(Id);
-        public IEnumerable<LaunchHistory>? GetAll() => _context.History!.AsEnumerable();
+        public IEnumerable<LaunchHistory>? GetAll() => _context.History.Include(x => x.Rule).AsEnumerable();
 
         public async Task<int> AddAsync(LaunchHistory item)
         {
@@ -42,7 +44,7 @@ namespace DBMonitor.DAL.Services
             _context!.History.Remove(await _context!.History!.FindAsync(Id));
             await _context!.SaveChangesAsync();
         }
-        public async Task<IEnumerable<LaunchHistory>> GetAllAsync() => await Task.Run(() => _context!.History.AsEnumerable());
+        public async Task<IEnumerable<LaunchHistory>> GetAllAsync() => await Task.Run(() => _context!.History.Include(x => x.Rule).AsEnumerable());
         public async Task<LaunchHistory?> GetAsync(int Id) => await _context!.History!.FindAsync(Id);
 
         public void Save() => _context.SaveChanges();

@@ -4,6 +4,7 @@ using DBMonitor.DAL;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DBMonitor.DAL.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220429032117_FixLaunchHistory")]
+    partial class FixLaunchHistory
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -44,7 +46,8 @@ namespace DBMonitor.DAL.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("RuleId");
+                    b.HasIndex("RuleId")
+                        .IsUnique();
 
                     b.ToTable("History");
                 });
@@ -91,8 +94,8 @@ namespace DBMonitor.DAL.Migrations
             modelBuilder.Entity("DBMonitor.BLL.LaunchHistory", b =>
                 {
                     b.HasOne("DBMonitor.BLL.Rule", "Rule")
-                        .WithMany("LaunchHistories")
-                        .HasForeignKey("RuleId")
+                        .WithOne("LaunchHistory")
+                        .HasForeignKey("DBMonitor.BLL.LaunchHistory", "RuleId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -101,7 +104,8 @@ namespace DBMonitor.DAL.Migrations
 
             modelBuilder.Entity("DBMonitor.BLL.Rule", b =>
                 {
-                    b.Navigation("LaunchHistories");
+                    b.Navigation("LaunchHistory")
+                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }

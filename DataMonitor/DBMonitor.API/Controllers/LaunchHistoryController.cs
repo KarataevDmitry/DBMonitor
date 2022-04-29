@@ -16,7 +16,11 @@ namespace DBMonitor.API.Controllers
         private readonly IDBService<LaunchHistory> _launchHistoryDb;
         // GET: api/<LaunchHistoryController>
         [HttpGet("GetAll")]
-        public IEnumerable<LaunchHistory> Get() => _launchHistoryDb.GetAll();
+        public IEnumerable<LaunchHistory> Get()
+        {
+            var d = _launchHistoryDb.GetAll();
+            return d;
+        }
 
         // GET api/<LaunchHistoryController>/5
         [HttpGet("Get/{id}")]

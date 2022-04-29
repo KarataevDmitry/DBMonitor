@@ -8,10 +8,6 @@ namespace DBMonitor.DAL.Configurations
 {
     public class LaunchHistoryConfiguration : IEntityTypeConfiguration<LaunchHistory>
     {
-        public void Configure(EntityTypeBuilder<LaunchHistory> builder)
-        {
-            builder.HasKey(x => x.Id);
-            builder.HasOne(x => x.Rule);
-        }
+        public void Configure(EntityTypeBuilder<LaunchHistory> builder) => builder.HasKey(x => x.Id);
     }
 }
