@@ -1,0 +1,25 @@
+﻿@model DBMonitor.UI.Models.RuleViewModel
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="CreateRule" asp-controller="RuleList" method="post" asp-antiforgery=false>
+            <div asp-validation-summary=None class="text-danger"></div>
+            @Html.EditorFor(x=>x, new {@Title = "Создание правила"});
+            <input type="submit" value="Создать" class="btn btn-primary" />
+        </form>
+    </div>
+</div>
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{
+    await Html.RenderPartialAsync("_ValidationScriptsPartial");
+}
+}

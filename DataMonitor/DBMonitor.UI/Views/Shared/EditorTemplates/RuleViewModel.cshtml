@@ -1,0 +1,37 @@
+﻿@model RuleViewModel
+<h1>@ViewData["Title"]</h1>
+<div class="form-group">
+    <table>
+        <tr>
+            <th>Наименование</th>
+            <td> @Html.TextBoxFor(m => m.Name)</td>
+        </tr>
+        <tr>
+            <th>Описание</th>
+            <td> @Html.TextBoxFor(m => m.Description)</td>
+        </tr>
+        <tr>
+            <th>Активно?</th>
+            <td> @Html.CheckBoxFor(m => m.IsActive)</td>
+        </tr>
+
+        <tr>
+            <th>Текст запроса</th>
+            <td>@Html.TextAreaFor(m=>m.QueryText)</td>
+        </tr>
+
+        <tr>
+            <th>Cron-выражение запуска</th>
+            <td>@Html.TextAreaFor(m=>m.RunAt)</td>
+        </tr>
+
+        <tr>
+            <th>Дата последнего запуска</th>
+            <td>@Html.TextBoxFor(m=> m.LastLaunchDate)</td>
+        </tr>
+        </tr>
+
+        <input type="hidden" asp-for="AddedByUser" value="@User.Identity?.Name" />
+        <input type="hidden" asp-for="Id" value="@Model.Id" />
+
+    </table>

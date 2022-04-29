@@ -1,0 +1,41 @@
+﻿@model RuleListViewModel
+
+@{
+    ViewData["Title"] = "Список правил";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Список правил</h1>
+<a asp-controller="RuleList" asp-action="CreateRule">Создать правило</a>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Наименование</th>
+            <th>Описание</th>
+            <th>Добавлено пользователем</th>
+            <th>Текст запроса</th>
+            <th>Дата удаления</th>
+            <th>Cron-выражение периода запуска</th>
+            <th>Дата последнего запуска</th>
+            <th>Действия</th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model.RuleList) 
+{
+        <tr>
+            <td>@item.Name</td>
+            <td>@item.Description</td>
+            <td>@item.AddedByUser</td>
+            <td>@item.QueryText</td>
+            <td>@item.DeletedAt</td>
+            <td>@item.RunAt</td>
+            <td>@item.LastLaunchDate</td>
+            <td>
+                <a asp-controller="RuleList" asp-action="EditRule" asp-route-id=@item.Id>Редактировать</a>   
+                <a asp-controller="RuleList" asp-action="DeleteRule" asp-route-id =@item.Id>Удалить</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

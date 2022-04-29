@@ -1,0 +1,31 @@
+﻿@model LaunchHistoryListViewModel
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>История запусков</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Правило</th>
+            <th>Результат</th>
+            <th>Запущено в</th>
+            <th>Время выполнения</th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model.LaunchHistoryList) {
+        <tr>
+            <td>@item.Rule</td>
+            <td>@item.Result</td>
+            <td>@item.LaunchedAt</td>
+            <td>@item.ExecutionTime</td>
+        </tr>
+}
+    </tbody>
+</table>
