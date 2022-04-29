@@ -88,5 +88,13 @@ namespace DBMonitor.APIClient
                 throw;
             }
         }
+
+        public async Task<LaunchHistory> CreateOrUpdate(LaunchHistoryDTO rule)
+        {
+            var req = new RestRequest($"api/LaunchHistory/Create");
+            req.AddBody(rule, JSON_MIME_TYPE);
+
+            return await _client.PutAsync<LaunchHistory>(req);
+        }
     }
 }

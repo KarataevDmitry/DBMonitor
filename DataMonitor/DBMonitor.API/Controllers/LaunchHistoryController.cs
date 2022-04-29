@@ -36,7 +36,7 @@ namespace DBMonitor.API.Controllers
 
         // PUT api/<LaunchHistoryController>/5
         [HttpPut("CreateOrUpdate/{id}")]
-        public IActionResult Put(int id, [FromBody] LaunchHistory value)
+        public IActionResult Put(int id, [FromBody] LaunchHistoryDTO value)
         {
             var ent = _launchHistoryDb.Get(id);
             var entEdit = value;
@@ -47,14 +47,14 @@ namespace DBMonitor.API.Controllers
 
             if (ent == null)
             {
-                var createdId = _launchHistoryDb.Add(entEdit);
+                var createdId = _launchHistoryDb.Add(new LaunchHistory() { ExecutionTime = value.ExecutionTime, LaunchedAt = value.LaunchedAt, Result = value.Result, RuleId = value.RuleId });
                 return Created($"/get/{createdId}", entEdit);
             }
 
             ent.ExecutionTime = entEdit.ExecutionTime;
             ent.LaunchedAt = entEdit.LaunchedAt;
             ent.Result = entEdit.Result;
-            ent.Rule = entEdit.Rule;
+            ent.RuleId = entEdit.RuleId;
             try
             {
                 _launchHistoryDb.Save();

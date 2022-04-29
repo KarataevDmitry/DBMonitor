@@ -1,4 +1,5 @@
 ﻿
+using System.Collections.Concurrent;
 using System.Data.SqlClient;
 using System.Diagnostics;
 
@@ -16,7 +17,13 @@ namespace DBMonitor.RulesRunner.Jobs
             return Task.Run(async () =>
             {
                 await Console.Out.WriteLineAsync("Exec query job fired");
-                var RuleToRun = (Rule)context.JobDetail.JobDataMap["Rule"];
+                var queue = (ConcurrentQueue<Rule>)context.JobDetail.JobDataMap["Rule"];
+                queue.TryDequeue(out var RuleToRun);
+                if (RuleToRun == null)
+                {
+                    await Console.Out.WriteLineAsync("Нет правил для выполнения");
+                    return;
+                }
                 var apiService = (IDataMonitorAPIClient)context.JobDetail.JobDataMap["API"];
                 var connectionString = (string)context.JobDetail.JobDataMap["ConnectionString"];
                 using var connection = new SqlConnection(connectionString);
@@ -34,8 +41,10 @@ namespace DBMonitor.RulesRunner.Jobs
                     LaunchedAt = DateTime.UtcNow,
                     RuleId = RuleToRun.Id
                 };
+                RuleToRun.LastLaunch = DateTime.UtcNow;
                 lh.Result = val == 0 ? LaunchResult.Success : LaunchResult.Failed;
-                await apiService.LaunchHistoryAPIService.Create(lh);
+                await apiService.LaunchHistoryAPIService.CreateOrUpdate(lh);
+                await apiService.RuleAPIService.UpdateRule(RuleToRun.Id, RuleToRun);
                 await Console.Out.WriteLineAsync("launch history entry created");
 
             });

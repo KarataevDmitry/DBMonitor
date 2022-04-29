@@ -1,6 +1,9 @@
 ﻿// See https://aka.ms/new-console-template for more information
 
+using System.Collections.Concurrent;
+
 using DBMonitor.APIClient;
+using DBMonitor.BLL;
 using DBMonitor.RulesRunner.Jobs;
 
 using Microsoft.Extensions.Configuration;
@@ -23,28 +26,32 @@ LogProvider.SetCurrentLogProvider(new ConsoleLogProvider());
 
 var sf = new StdSchedulerFactory();
 var sched = await sf.GetScheduler();
+ConcurrentQueue<Rule> rQueue = new ConcurrentQueue<Rule>();
 var rules = await APIService.RuleAPIService.GetRules();
 var rulesToExecute = rules.Where(x => !x.DeletedAt.HasValue).ToList();
 await sched.Start();
 foreach (var rule in rulesToExecute)
 {
+
     var d = new Dictionary<string, object>()
     {
-        { "Rule", rule },
+        { "Queue", rQueue },
         { "API", APIService },
-        {"ConnectionString", config.GetConnectionString("DatabaseConnection")}
+        {"ConnectionString", config.GetConnectionString("DatabaseConnection")},
+        {"Scheduler", sched }
     };
-    var job = JobBuilder.Create<QueryExecuteJob>()
-        .WithIdentity("queryExec")
+
+    var jobEnq = JobBuilder.Create<RuleEnqueueJob>()
+        .WithIdentity("ruleEnque")
         .UsingJobData(new JobDataMap((IDictionary<string, object>)d))
         .Build();
-
     var trigger = TriggerBuilder
         .Create()
-        .StartNow()
-        .WithCronSchedule(rule.RunAt)
+        .WithSimpleSchedule((s) => s.WithIntervalInSeconds(60))
         .Build();
-    await sched.ScheduleJob(job, trigger);
+
+
+    await sched.ScheduleJob(jobEnq, trigger);
     exitEvent.WaitOne();
 
 }
