@@ -1,0 +1,34 @@
+﻿@model RuleViewModel
+   <table class="table">
+        <tr>
+            <th>Наименование</th>
+            <td> @Html.DisplayFor(m => m.Name)</td>
+        </tr>
+        <tr>
+            <th>Описание</th>
+            <td>@Html.DisplayFor(m => m.Description)</td>
+        </tr>
+        <tr>
+            <th>Активно?</th>
+            <td> @Html.DisplayFor(m => m.IsActive)</td>
+        </tr>
+
+        <tr>
+            <th>Текст запроса</th>
+            <td>@Html.DisplayFor(m=>m.QueryText)</td>
+        </tr>
+
+        <tr>
+            <th>Cron-выражение запуска</th>
+            <td>@Html.DisplayFor(m=>m.RunAt)</td>
+        </tr>
+
+        <tr>
+            <th>Дата последнего запуска</th>
+            <td>@Html.DisplayFor(m=> m.LastLaunchDate)</td>
+        </tr>
+
+        
+
+    </table>
+

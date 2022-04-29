@@ -21,7 +21,7 @@
     <tbody>
 @foreach (var item in Model.LaunchHistoryList) {
         <tr>
-            <td>@item.Rule</td>
+            <td>@Html.DisplayFor(p=>item.Rule)</td>
             <td>@item.Result</td>
             <td>@item.LaunchedAt</td>
             <td>@item.ExecutionTime</td>

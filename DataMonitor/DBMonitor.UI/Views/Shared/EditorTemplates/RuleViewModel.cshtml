@@ -29,7 +29,6 @@
             <th>Дата последнего запуска</th>
             <td>@Html.TextBoxFor(m=> m.LastLaunchDate)</td>
         </tr>
-        </tr>
 
         <input type="hidden" asp-for="AddedByUser" value="@User.Identity?.Name" />
         <input type="hidden" asp-for="Id" value="@Model.Id" />
